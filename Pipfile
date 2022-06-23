@@ -1,0 +1,26 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+autopep8 = "*"
+pylint = "*"
+#REFACTOR: It may be better to specify the version.
+
+[packages]
+matplotlib=">=3.4"
+jupyterlab = "*"
+llvmlite="0.31.0"
+pymatgen = "2022.4.19"
+matminer = "*"
+pycaret = "*"
+beautifulsoup4 = "*"
+ipywidgets = "*"
+nodejs = "*"
+bokeh = "*"
+matbench = "*"
+black = "*"
+
+[requires]
+python_version = "3.8.13"
