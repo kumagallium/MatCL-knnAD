@@ -19,8 +19,6 @@ beautifulsoup4 = "*"
 ipywidgets = "*"
 nodejs = "*"
 bokeh = "*"
-matbench = "*"
-black = "*"
 
 [requires]
 python_version = "3.8.13"
