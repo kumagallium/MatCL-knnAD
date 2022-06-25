@@ -9,8 +9,13 @@ from matminer.datasets import load_dataset
 
 
 class Datasets:
-
-    def __init__(self, dbname="starrydata", dtype="interpolated", filetype="csv", data_dir="datasets/"):
+    def __init__(
+        self,
+        dbname="starrydata",
+        dtype="interpolated",
+        filetype="csv",
+        data_dir="datasets/",
+    ):
         self.dbname = dbname
         self.dtype = dtype
         self.filetype = filetype
@@ -18,9 +23,9 @@ class Datasets:
 
     def info(self):
         if self.dbname == "starrydata":
-            print("Database is '"+self.dbname+"("+self.dtype+")'")
+            print("Database is '" + self.dbname + "(" + self.dtype + ")'")
         else:
-            print("Database is '"+self.dbname+"'")
+            print("Database is '" + self.dbname + "'")
 
     def get_versions(self):
         base_url = "https://github.com"
@@ -30,7 +35,10 @@ class Datasets:
         datalist = []
         for a in soup.findAll("a", attrs={"class": "Link--primary"}):
             datalist.append(a["href"])
-        versionlist = sorted([dl.split("/")[-1].split(".")[0] for dl in datalist if ".zip" in dl], reverse=True)
+        versionlist = sorted(
+            [dl.split("/")[-1].split(".")[0] for dl in datalist if ".zip" in dl],
+            reverse=True,
+        )
         return versionlist
 
     def starrydata_download(self, version="last"):
@@ -42,15 +50,27 @@ class Datasets:
         for a in soup.findAll("a", attrs={"class": "Link--primary"}):
             datalist.append(a["href"])
         if version == "last":
-            zippath = base_url + sorted([dl for dl in datalist if ".zip" in dl], reverse=True)[0]
+            zippath = (
+                base_url
+                + sorted([dl for dl in datalist if ".zip" in dl], reverse=True)[0]
+            )
         else:
             versionidx = self.get_versions().index(version)
-            zippath = base_url + sorted([dl for dl in datalist if ".zip" in dl], reverse=True)[versionidx]
+            zippath = (
+                base_url
+                + sorted([dl for dl in datalist if ".zip" in dl], reverse=True)[
+                    versionidx
+                ]
+            )
         zippath = zippath.replace("/blob/", "/raw/")
         print(self.data_dir)
 
-        data_path = os.path.join(self.data_dir, self.dtype+"_starrydata_" + version+ "." + self.filetype)
-        if not os.path.exists(self.data_dir+self.dtype+"_starrydata_"+version+".csv"):
+        data_path = os.path.join(
+            self.data_dir, self.dtype + "_starrydata_" + version + "." + self.filetype
+        )
+        if not os.path.exists(
+            self.data_dir + self.dtype + "_starrydata_" + version + ".csv"
+        ):
             if not os.path.exists(self.data_dir):
                 os.mkdir(self.data_dir)
             save_path = self.data_dir + "download.zip"
@@ -59,30 +79,43 @@ class Datasets:
             try:
                 with urllib.request.urlopen(zippath) as download_file:
                     data = download_file.read()
-                    with open(save_path, mode='wb') as save_file:
+                    with open(save_path, mode="wb") as save_file:
                         save_file.write(data)
             except urllib.error.URLError as e:
                 print(e)
 
             print("...")
-            with zipfile.ZipFile(os.path.join(self.data_dir,"download.zip")) as obj_zip:
+            with zipfile.ZipFile(
+                os.path.join(self.data_dir, "download.zip")
+            ) as obj_zip:
                 obj_zip.extractall(self.data_dir)
             print("unzip")
 
             dirname = zippath.split("/")[-1].split(".")[0]
-			
+
             if self.dtype == "interpolated":
-                shutil.copyfile(os.path.join(self.data_dir, dirname, dirname+"_interpolated_data.csv"), data_path)
+                shutil.copyfile(
+                    os.path.join(
+                        self.data_dir, dirname, dirname + "_interpolated_data.csv"
+                    ),
+                    data_path,
+                )
             elif self.dtype == "raw":
-                shutil.copyfile(os.path.join(self.data_dir, dirname, dirname+"_rawdata.csv"), data_path)
-            shutil.rmtree(self.data_dir+dirname)
+                shutil.copyfile(
+                    os.path.join(self.data_dir, dirname, dirname + "_rawdata.csv"),
+                    data_path,
+                )
+            shutil.rmtree(self.data_dir + dirname)
             os.remove(self.data_dir + "download.zip")
         print("finished: " + data_path)
 
     def get_alldata(self, version="last"):
         if self.dbname == "starrydata":
             self.starrydata_download(version)
-            data_path = os.path.join(self.data_dir, self.dtype+"_starrydata_" + version+ "." + self.filetype)
+            data_path = os.path.join(
+                self.data_dir,
+                self.dtype + "_starrydata_" + version + "." + self.filetype,
+            )
             try:
                 if self.filetype == "csv":
                     df_data = pd.read_csv(data_path, index_col=0)
@@ -90,25 +123,23 @@ class Datasets:
                 df_data = pd.DataFrame([])
         elif self.dbname == "materials project":
             if self.filetype == "csv":
-                if not os.path.exists(self.data_dir+"mp_all_20181018.csv"):
+                if not os.path.exists(self.data_dir + "mp_all_20181018.csv"):
                     if not os.path.exists(self.data_dir):
                         os.mkdir(self.data_dir)
                     print("Downloading data")
                     df_data = load_dataset("mp_all_20181018")
                     print("...")
-                    df_data.to_csv(self.data_dir+'mp_all_20181018.csv', index=False)
+                    df_data.to_csv(self.data_dir + "mp_all_20181018.csv", index=False)
                     print("Download completed")
                 else:
-                    df_data = pd.read_csv(self.data_dir+'mp_all_20181018.csv')
+                    df_data = pd.read_csv(self.data_dir + "mp_all_20181018.csv")
             elif self.filetype == "pkl":
-                if not os.path.exists(self.data_dir+"mp_all_20181018.pkl"):
+                if not os.path.exists(self.data_dir + "mp_all_20181018.pkl"):
                     if not os.path.exists(self.data_dir):
                         os.mkdir(self.data_dir)
                     df_data = load_dataset("mp_all_20181018")
-                    df_data.to_pickle(self.data_dir+'mp_all_20181018.pkl')
+                    df_data.to_pickle(self.data_dir + "mp_all_20181018.pkl")
                 else:
-                    df_data = pd.read_pickle(self.data_dir+'mp_all_20181018.pkl')
-
+                    df_data = pd.read_pickle(self.data_dir + "mp_all_20181018.pkl")
 
         return df_data
-
