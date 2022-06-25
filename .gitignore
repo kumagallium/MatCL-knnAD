@@ -2,5 +2,12 @@ __pycache__
 .pyc
 .ipynb_checkpoints
 .DS_Store
+*.log
 Dockerfile
 docker-compose.yml
+datasets
+images
+adparams
+errors/
+others/
+models/
