@@ -58,11 +58,11 @@ class MLModel:
                 silent=True,
                 verbose=False,
                 transform_target=True,
-            )  # ,transformation=True,transform_target=True
+            )
             print("create")
             selected_model = regression.create_model(
                 "rf", verbose=False
-            )  # , criterion="mae")
+            )
             if len(tune_params) > 0:
                 print("tune")
                 tune_model = regression.tune_model(

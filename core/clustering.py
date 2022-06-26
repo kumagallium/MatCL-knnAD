@@ -47,10 +47,10 @@ class Cluster:
             clustercomp = df_cluster[df_cluster["cluster"] == c]["composition"].unique()
             clustereltmp = [0] * len(clusterelements)
             for comp in clustercomp:
-                for el, frac in (
+                for el, _ in (
                     mg.Composition(comp).fractional_composition.as_dict().items()
                 ):
-                    clustereltmp[mg.Element(el).number - 1] += 1  # frac
+                    clustereltmp[mg.Element(el).number - 1] += 1
             clusterelements["count"] = clustereltmp
             matfamily.append(
                 "-".join(

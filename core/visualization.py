@@ -462,6 +462,157 @@ class Visualization:
         fig.savefig(os.path.join(self.image_dirpath, "TE_parityplot.png"))
         return pd.DataFrame(error_table)
 
+    def show_errors_vs_number_of_adjacents(
+        self, proplist, xlist, mapedict, rmsledict, sort_stack, matcolor
+    ):
+        linestyle = ["dashdot", "dotted", "dashdot", "dashed", "solid"]
+        linecolor = ["C0", "C1", "C2", "C3", "C4"]
+
+        fig = plt.figure(figsize=(7.5, 3), dpi=300, facecolor="w", edgecolor="k")
+        ax = fig.add_subplot(1, 2, 1)
+        ax.yaxis.set_ticks_position("both")
+        ax.set_xlim(0, 400)
+        ax.set_ylim(0, 100)
+        ax.set_xlabel("Number of adjacent known materials")
+        ax.set_ylabel("MAPE [%]")
+
+        for idx, prop in enumerate(proplist):
+            if prop == "ZT":
+                ax.plot(
+                    xlist,
+                    mapedict[prop],
+                    label="$zT$",
+                    linestyle=linestyle[idx],
+                    color=linecolor[idx],
+                )
+            elif prop == "ZTcalc":
+                ax.plot(
+                    xlist,
+                    mapedict[prop],
+                    label="$zT_{ \mathrm{calc}}$",
+                    linestyle=linestyle[idx],
+                    color=linecolor[idx],
+                )
+            elif prop == "PFcalc":
+                ax.plot(
+                    xlist,
+                    mapedict[prop],
+                    label="$PF_{ \mathrm{calc}}$",
+                    linestyle=linestyle[idx],
+                    color=linecolor[idx],
+                )
+            else:
+                ax.plot(
+                    xlist,
+                    mapedict[prop],
+                    label=prop,
+                    linestyle=linestyle[idx],
+                    color=linecolor[idx],
+                )
+
+        ax2 = ax.twinx()
+        ax2.set_ylim(0, 1000)
+        ax2.set_ylabel("Number of test data")
+        ax.patch.set_visible(False)
+        ax2.patch.set_visible(True)
+        ax2.stackplot(xlist, sort_stack, colors=matcolor.values(), alpha=1)
+        ax.set_zorder(1)
+        ax2.set_zorder(0)
+        ax.legend(
+            loc="upper right",
+            fontsize=7,
+            facecolor="white",
+            framealpha=1,
+            markerscale=0.7,
+        ).get_frame().set_linewidth(0.1)
+        xmin = 0
+        xmax = 400
+        ymin = 0
+        ymax = 100
+        ax.text(
+            xmin - ((xmax - xmin) / 3),
+            ymax + ((ymax - ymin) / 10),
+            "(a)",
+            size=11,
+            ha="left",
+            va="top",
+        )
+
+        ax = fig.add_subplot(1, 2, 2)
+        ax.yaxis.set_ticks_position("both")
+        ax.set_xlim(0, 400)
+        ax.set_ylim(
+            0,
+        )
+        ax.set_xlabel("Number of adjacent known materials")
+        ax.set_ylabel("RMSLE")
+
+        for idx, prop in enumerate(proplist):
+            if prop == "ZT":
+                ax.plot(
+                    xlist,
+                    rmsledict[prop],
+                    label="$zT$",
+                    linestyle=linestyle[idx],
+                    color=linecolor[idx],
+                )
+            elif prop == "ZTcalc":
+                ax.plot(
+                    xlist,
+                    rmsledict[prop],
+                    label="$zT_{ \mathrm{calc}}$",
+                    linestyle=linestyle[idx],
+                    color=linecolor[idx],
+                )
+            elif prop == "PFcalc":
+                ax.plot(
+                    xlist,
+                    rmsledict[prop],
+                    label="$PF_{ \mathrm{calc}}$",
+                    linestyle=linestyle[idx],
+                    color=linecolor[idx],
+                )
+            else:
+                ax.plot(
+                    xlist,
+                    rmsledict[prop],
+                    label=prop,
+                    linestyle=linestyle[idx],
+                    color=linecolor[idx],
+                )
+
+        ax2 = ax.twinx()
+        ax2.set_ylim(0, 1000)
+        ax2.set_ylabel("Number of test data")
+        ax.patch.set_visible(False)
+        ax2.patch.set_visible(True)
+        ax2.stackplot(xlist, sort_stack, colors=matcolor.values(), alpha=1)
+        ax.set_zorder(1)
+        ax2.set_zorder(0)
+        ax.legend(
+            loc="upper right",
+            fontsize=7,
+            facecolor="white",
+            framealpha=1,
+            markerscale=0.7,
+        ).get_frame().set_linewidth(0.1)
+        xmin = 0
+        xmax = 400
+        ymin = 0
+        ymax = 1
+        ax.text(
+            xmin - ((xmax - xmin) / 3),
+            ymax + ((ymax - ymin) / 10),
+            "(b)",
+            size=11,
+            ha="left",
+            va="top",
+        )
+
+        plt.tight_layout()
+
+        fig.savefig(os.path.join(self.image_dirpath, "stack_ad_errors.png"))
+
     def show_ranking_table_detail(
         self,
         df_table,
@@ -708,4 +859,4 @@ class Visualization:
 
         plt.xticks(list(klist)[::4], list(klist)[::4])
         plt.tight_layout()
-        fig.savefig("images/MCAD")
+        fig.savefig(os.path.join(self.image_dirpath, "MCAD.png"))
