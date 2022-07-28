@@ -32,7 +32,7 @@ Under construction
 
 <a name="contrib"></a>
 ## How to contribute
-1. Fork it (`git clone https://github.com/kumagallium/pyklab.git`)
+1. Fork it (`git clone https://github.com/kumagallium/matCL-knnAD`)
 2. Create your feature branch (`git checkout -b your-new-feature`)
 3. Commit your changes (`git commit -am 'feat: add some feature'`)
 4. Push to the branch (`git push origin your-new-feature`)
