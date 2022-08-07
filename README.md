@@ -40,7 +40,7 @@ Under construction
    
 <a name="fund"></a>
 ## Funding support
-This work was supported by JSPS KAKENHI (grant number JP20340363).
+This work was supported by JSPS KAKENHI Grant Number JP20K22466.
 
 <a name="author"></a>
 ## Author
