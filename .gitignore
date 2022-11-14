@@ -3,8 +3,6 @@ __pycache__
 .ipynb_checkpoints
 .DS_Store
 *.log
-Dockerfile
-docker-compose.yml
 datasets
 images
 adparams
