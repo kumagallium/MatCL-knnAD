@@ -58,6 +58,8 @@ Please cite the following work if you want to use matCL-knnAD.
 }
 ```
 
+URL: https://www.tandfonline.com/doi/full/10.1080/27660400.2022.2109447
+
 <a name="contrib"></a>
 ## How to contribute
 1. Fork it (`git clone https://github.com/kumagallium/matCL-knnAD.git`)
