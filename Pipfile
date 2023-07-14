@@ -11,7 +11,7 @@ pylint = "*"
 [packages]
 matplotlib=">=3.4"
 jupyterlab = "*"
-llvmlite="0.31.0"
+llvmlite="*"
 pymatgen = "2022.4.19"
 matminer = "*"
 pycaret = "*"
@@ -20,6 +20,7 @@ ipywidgets = "*"
 nodejs = "*"
 bokeh = "*"
 black = "*"
+seaborn = "*"
 
 [requires]
 python_version = "3.8.13"
