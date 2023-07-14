@@ -118,19 +118,19 @@ class Visualization:
                     "models/model_" + tg.replace(" ", "_")
                 )
                 pred_model = regression.predict_model(selected_model, data=test_inAD)
-                pred_model["Label"] = (
-                    pred_model["Label"] * pred_model["Temperature"] * 10**-3
+                pred_model["prediction_label"] = (
+                    pred_model["prediction_label"] * pred_model["Temperature"] * 10**-3
                 )
-                predAD = pred_model["Label"].values
+                predAD = pred_model["prediction_label"].values
                 trueAD = pred_model.loc[:, tg].values
 
                 pred_model_out = regression.predict_model(
                     selected_model, data=test_outAD
                 )
-                pred_model_out["Label"] = (
-                    pred_model_out["Label"] * pred_model_out["Temperature"] * 10**-3
+                pred_model_out["prediction_label"] = (
+                    pred_model_out["prediction_label"] * pred_model_out["Temperature"] * 10**-3
                 )
-                predAD_out = pred_model_out["Label"].values
+                predAD_out = pred_model_out["prediction_label"].values
                 trueAD_out = df_test_outAD.loc[:, tg].values
 
                 ax.set_xlabel("Experimental $zT$")
@@ -164,11 +164,11 @@ class Visualization:
                 pred_model_S = regression.predict_model(
                     selected_model_S, data=test_inAD_S
                 )
-                predAD_S = pred_model_S["Label"].values
+                predAD_S = pred_model_S["prediction_label"].values
                 pred_model_out_S = regression.predict_model(
                     selected_model_S, data=test_outAD_S
                 )
-                predAD_out_S = pred_model_out_S["Label"].values
+                predAD_out_S = pred_model_out_S["prediction_label"].values
 
                 test_inAD_El = pd.concat(
                     [
@@ -190,11 +190,11 @@ class Visualization:
                 pred_model_El = regression.predict_model(
                     selected_model_El, data=test_inAD_El
                 )
-                predAD_El = pred_model_El["Label"].values
+                predAD_El = pred_model_El["prediction_label"].values
                 pred_model_out_El = regression.predict_model(
                     selected_model_El, data=test_outAD_El
                 )
-                predAD_out_El = pred_model_out_El["Label"].values
+                predAD_out_El = pred_model_out_El["prediction_label"].values
 
                 test_inAD_k = pd.concat(
                     [
@@ -216,11 +216,11 @@ class Visualization:
                 pred_model_k = regression.predict_model(
                     selected_model_k, data=test_inAD_k
                 )
-                predAD_k = pred_model_k["Label"].values
+                predAD_k = pred_model_k["prediction_label"].values
                 pred_model_out_k = regression.predict_model(
                     selected_model_k, data=test_outAD_k
                 )
-                predAD_out_k = pred_model_out_k["Label"].values
+                predAD_out_k = pred_model_out_k["prediction_label"].values
 
                 predAD = (
                     ((predAD_S * 10**-6) ** 2) * (predAD_El) / predAD_k
@@ -263,11 +263,11 @@ class Visualization:
                 pred_model_S = regression.predict_model(
                     selected_model_S, data=test_inAD_S
                 )
-                predAD_S = pred_model_S["Label"].values
+                predAD_S = pred_model_S["prediction_label"].values
                 pred_model_out_S = regression.predict_model(
                     selected_model_S, data=test_outAD_S
                 )
-                predAD_out_S = pred_model_out_S["Label"].values
+                predAD_out_S = pred_model_out_S["prediction_label"].values
 
                 test_inAD_El = pd.concat(
                     [
@@ -289,11 +289,11 @@ class Visualization:
                 pred_model_El = regression.predict_model(
                     selected_model_El, data=test_inAD_El
                 )
-                predAD_El = pred_model_El["Label"].values
+                predAD_El = pred_model_El["prediction_label"].values
                 pred_model_out_El = regression.predict_model(
                     selected_model_El, data=test_outAD_El
                 )
-                predAD_out_El = pred_model_out_El["Label"].values
+                predAD_out_El = pred_model_out_El["prediction_label"].values
 
                 predAD = ((predAD_S * 10**-6) ** 2) * (predAD_El) * (10**3)
                 trueAD = df_test_inAD.loc[:, "PFcalc"].values
@@ -324,14 +324,14 @@ class Visualization:
                     "models/model_" + tg.replace(" ", "_")
                 )
                 pred_model = regression.predict_model(selected_model, data=test_inAD)
-                predAD = pred_model["Label"].values
+                predAD = pred_model["prediction_label"].values
                 trueAD = df_test_inAD.loc[:, tg].values
 
                 pred_model_out = regression.predict_model(
                     selected_model, data=test_outAD
                 )
-                predAD_out = pred_model_out["Label"].values
-                trueAD_out = pred_model_out.loc[:, tg].values
+                predAD_out = pred_model_out["prediction_label"].values
+                trueAD_out = df_test_outAD.loc[:, tg].values
 
                 if tg == "Thermal conductivity":
                     ax.set_xlabel("Experimental $\u03BA$ [Wm$^{-1}$K$^{-1}$]")

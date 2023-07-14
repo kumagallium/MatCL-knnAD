@@ -18,7 +18,7 @@ class MLModel:
             train,
             target=target,
             session_id=1000,
-            silent=True,
+            #silent=True,
             verbose=False,
             transform_target=True,
         )  # ,transformation=True,transform_target=True
@@ -42,7 +42,7 @@ class MLModel:
             "models/model_" + target.replace(" ", "_")
         )
         pred_model = regression.predict_model(selected_model, data=data)
-        print(pred_model["Label"].values[0])
+        print(pred_model["prediction_label"].values[0])
 
     def create_ad_starrydata_models(self, targets, df_train, inputsize, tune_params={}):
         models = {}
@@ -55,7 +55,7 @@ class MLModel:
                 target=target,
                 session_id=1000,
                 fold=5,
-                silent=True,
+                #silent=True,
                 verbose=False,
                 transform_target=True,
             )
@@ -103,10 +103,10 @@ class MLModel:
                     "models/model_" + tg.replace(" ", "_")
                 )
                 pred_model = regression.predict_model(selected_model, data=test_inAD)
-                pred_model["Label"] = (
-                    pred_model["Label"] * pred_model["Temperature"] * 10**-3
+                pred_model["prediction_label"] = (
+                    pred_model["prediction_label"] * pred_model["Temperature"] * 10**-3
                 )
-                predAD = pred_model["Label"].values
+                predAD = pred_model["prediction_label"].values
                 trueAD = (
                     pred_model.loc[:, tg].values * pred_model["Temperature"] * 10**-3
                 )
@@ -124,7 +124,7 @@ class MLModel:
                 pred_model_S = regression.predict_model(
                     selected_model_S, data=test_inAD_S
                 )
-                predAD_S = pred_model_S["Label"].values
+                predAD_S = pred_model_S["prediction_label"].values
 
                 test_inAD_El = pd.concat(
                     [
@@ -139,7 +139,7 @@ class MLModel:
                 pred_model_El = regression.predict_model(
                     selected_model_El, data=test_inAD_El
                 )
-                predAD_El = pred_model_El["Label"].values
+                predAD_El = pred_model_El["prediction_label"].values
 
                 test_inAD_k = pd.concat(
                     [
@@ -154,7 +154,7 @@ class MLModel:
                 pred_model_k = regression.predict_model(
                     selected_model_k, data=test_inAD_k
                 )
-                predAD_k = pred_model_k["Label"].values
+                predAD_k = pred_model_k["prediction_label"].values
 
                 predAD = (
                     ((predAD_S * 10**-6) ** 2) * (predAD_El) / predAD_k
@@ -174,7 +174,7 @@ class MLModel:
                 pred_model_S = regression.predict_model(
                     selected_model_S, data=test_inAD_S
                 )
-                predAD_S = pred_model_S["Label"].values
+                predAD_S = pred_model_S["prediction_label"].values
 
                 test_inAD_El = pd.concat(
                     [
@@ -189,7 +189,7 @@ class MLModel:
                 pred_model_El = regression.predict_model(
                     selected_model_El, data=test_inAD_El
                 )
-                predAD_El = pred_model_El["Label"].values
+                predAD_El = pred_model_El["prediction_label"].values
 
                 predAD = ((predAD_S * 10**-6) ** 2) * (predAD_El) * (10**3)
                 trueAD = df_test_inAD.loc[
@@ -207,7 +207,7 @@ class MLModel:
                     "models/model_" + tg.replace(" ", "_")
                 )
                 pred_model = regression.predict_model(selected_model, data=test_inAD)
-                predAD = pred_model["Label"].values
+                predAD = pred_model["prediction_label"].values
                 trueAD = df_test_inAD.loc[:, tg].values
 
             r2list = []
@@ -320,9 +320,9 @@ class MLModel:
                         model_k, data=df_decriptor[filterAD].reset_index(drop=True)
                     )
                     new_prediction_S["ZT"] = (
-                        ((new_prediction_S["Label"] * 10**-6) ** 2)
-                        * (new_prediction_El["Label"])
-                        / new_prediction_k["Label"]
+                        ((new_prediction_S["prediction_label"] * 10**-6) ** 2)
+                        * (new_prediction_El["prediction_label"])
+                        / new_prediction_k["prediction_label"]
                     ) * new_prediction_S["Temperature"]
                     clusterlist = cluster_model.predict(
                         df_decriptor[filterAD].reset_index(drop=True)
@@ -360,8 +360,8 @@ class MLModel:
                         model_El, data=df_decriptor[filterAD].reset_index(drop=True)
                     )
                     new_prediction_S["PF"] = (
-                        ((new_prediction_S["Label"] * 10**-6) ** 2)
-                        * (new_prediction_El["Label"])
+                        ((new_prediction_S["prediction_label"] * 10**-6) ** 2)
+                        * (new_prediction_El["prediction_label"])
                         * 10**3
                     )
                     clusterlist = cluster_model.predict(
@@ -399,13 +399,13 @@ class MLModel:
                         model, data=df_decriptor[filterAD].reset_index(drop=True)
                     )
                     if target == "ZT":
-                        new_prediction["Label"] = (
-                            new_prediction["Label"]
+                        new_prediction["prediction_label"] = (
+                            new_prediction["prediction_label"]
                             * (10**-3)
                             * new_prediction["Temperature"]
                         )
                     elif target == "Electrical conductivity":
-                        new_prediction["Label"] = new_prediction["Label"] * (10**-5)
+                        new_prediction["prediction_label"] = new_prediction["prediction_label"] * (10**-5)
                     clusterlist = cluster_model.predict(
                         df_decriptor[filterAD].reset_index(drop=True)
                     )
@@ -415,7 +415,7 @@ class MLModel:
                     ].values
 
                     idx = 0
-                    for comp, value in new_prediction[["composition", "Label"]].values:
+                    for comp, value in new_prediction[["composition", "prediction_label"]].values:
                         table.setdefault(comp, {})
                         table[comp][T] = value
                         reltable.setdefault(comp, {})

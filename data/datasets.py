@@ -1,11 +1,12 @@
 import urllib.error
 import urllib.request
-from bs4 import BeautifulSoup
 import zipfile
 import os
 import shutil
 import pandas as pd
 from matminer.datasets import load_dataset
+import requests
+import json
 
 
 class Datasets:
@@ -30,11 +31,11 @@ class Datasets:
     def get_versions(self):
         base_url = "https://github.com"
         file_url = base_url + "/starrydata/starrydata_datasets/tree/master/datasets"
-        html = urllib.request.urlopen(file_url)
-        soup = BeautifulSoup(html, "html.parser")
+        response = requests.get(file_url)
+        html = json.loads(response.text)
         datalist = []
-        for a in soup.findAll("a", attrs={"class": "Link--primary"}):
-            datalist.append(a["href"])
+        for item in html["payload"]["tree"]["items"]:
+            datalist.append(item["path"].replace("datasets/",""))
         versionlist = sorted(
             [dl.split("/")[-1].split(".")[0] for dl in datalist if ".zip" in dl],
             reverse=True,
@@ -44,20 +45,21 @@ class Datasets:
     def starrydata_download(self, version="last"):
         base_url = "https://github.com"
         file_url = base_url + "/starrydata/starrydata_datasets/tree/master/datasets"
-        html = urllib.request.urlopen(file_url)
-        soup = BeautifulSoup(html, "html.parser")
+        data_url = "https://github.com/starrydata/starrydata_datasets/blob/master/datasets/"
+        response = requests.get(file_url)
+        html = json.loads(response.text)
         datalist = []
-        for a in soup.findAll("a", attrs={"class": "Link--primary"}):
-            datalist.append(a["href"])
+        for item in html["payload"]["tree"]["items"]:
+            datalist.append(item["path"].replace("datasets/",""))
         if version == "last":
             zippath = (
-                base_url
+                data_url
                 + sorted([dl for dl in datalist if ".zip" in dl], reverse=True)[0]
             )
         else:
             versionidx = self.get_versions().index(version)
             zippath = (
-                base_url
+                data_url
                 + sorted([dl for dl in datalist if ".zip" in dl], reverse=True)[
                     versionidx
                 ]
